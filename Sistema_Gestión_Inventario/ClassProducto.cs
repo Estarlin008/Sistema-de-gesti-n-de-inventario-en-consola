@@ -6,6 +6,7 @@ public class Producto
 
     private int _Cantidad;
 
+    public string Estado;
     public string Nombre {
         get => _Nombre;
         set
@@ -44,7 +45,7 @@ public class Producto
     }
 
 
-    public Producto(string nombre, decimal precio, int cantidad)
+    public Producto(string nombre, decimal precio, int cantidad, string estado)
     {
         if (string.IsNullOrWhiteSpace(nombre))
         {
@@ -58,9 +59,14 @@ public class Producto
         {
             throw new ArgumentException("La cantidad no puede ser menor a cero");
         }
+        else if (string.IsNullOrWhiteSpace(estado))
+        {
+            throw new ArgumentException("El estado invalido");
+        }
 
         Nombre = nombre;
         Precio = precio;
         Cantidad = cantidad;
+        Estado = estado;
     }
 }

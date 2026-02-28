@@ -1,6 +1,5 @@
 ﻿
-using System.Data;
-using System.Diagnostics.Contracts;
+
 
 namespace Sistema_Gestión_Inventario;
 
@@ -21,7 +20,8 @@ class Progran
                 Console.WriteLine("3. Ver Productos en el inventario");
                 Console.WriteLine("4. Abastecer producto");
                 Console.WriteLine("5. Eliminar producto");
-                Console.WriteLine("6. Salir");
+                Console.WriteLine("6. Ver productos eliminados");
+                Console.WriteLine("7. Salir");
 
                 string imput = Console.ReadLine();
 
@@ -36,6 +36,25 @@ class Progran
                         case 2:
                         VenderProducto(ListProducto);
                         break;
+
+                        case 3:
+                        VerProductos(ListProducto);
+                        break;
+
+                        case 4:
+                        AbastecerProducto(ListProducto);
+                        break;
+
+                        case 5:
+                        EliminarProducto(ListProducto);
+                        break;
+
+                        case 6:
+                        VerProductosEliminados(ListProducto);
+                        break;
+
+                        case 7:
+                        return;
                     }
                 }
                 else
@@ -84,11 +103,8 @@ class Progran
             return;
         }
 
-        Producto nuevo = new Producto(
-        nombre,
-        precio,
-        cantidad
-        );
+        string estado = "Activo";
+        Producto nuevo = new Producto(nombre, precio, cantidad, estado);
 
         productos.Add(nuevo);
         Console.WriteLine("Producto registrado correctamente");
@@ -109,7 +125,7 @@ class Progran
 
         foreach(Producto p in productos)
         {
-            if(p.Nombre.ToLower() == nombre.ToLower())
+            if(p.Nombre == nombre || p.Estado == "Activo")
             {
                 if(p.Cantidad >= cantidad)
                 {
@@ -121,11 +137,75 @@ class Progran
             }
 
         }
-
         if (!encontrado)
         {
             Console.WriteLine("Producto no encontrado");
         }        
     }
 
+    public static void VerProductos(List<Producto> productos)
+    {
+        Console.WriteLine($"{"Nombre",-10} {"Precio",-10} {"Cantidad",-10} {"Estado",-10}");
+        foreach(Producto p in productos)
+        {
+           if(p.Estado == "Activo")
+            {
+                Console.WriteLine($"{p.Nombre,-10} {p.Precio,-10} {p.Cantidad,-10} {p.Estado,-10}");
+            }
+           
+        }
+    }
+
+    
+    public static void AbastecerProducto(List<Producto> productos)
+    {
+        Console.WriteLine("Ingrese el nombre del producto");
+        string nombre = Console.ReadLine();
+
+        Console.WriteLine("Agregar la cantidad");
+        if(!int.TryParse(Console.ReadLine(), out int cantidad))
+        {
+            Console.WriteLine("Cantidad invalidad");
+            return;
+        }
+        else if (cantidad <= 0)
+        {
+            Console.WriteLine("La cantidad no puede ser menor o igual a cero");
+        }
+        foreach(Producto p in productos)
+        {
+            if(p.Nombre == nombre)
+            {
+                p.Cantidad += cantidad;
+                Console.WriteLine("Abastecimiento exitoso");
+            }
+        }
+    }
+
+    public static void EliminarProducto(List<Producto> productos)
+    {
+        Console.WriteLine("Ingrese el nombre del producto a eliminar");
+        string nombre = Console.ReadLine();
+
+        foreach(Producto p in productos)
+        {
+            if(p.Nombre == nombre)
+            {
+                p.Estado = "Eliminado";
+                Console.WriteLine("Producto eliminado");
+            }
+        }
+    }
+
+    public static void VerProductosEliminados(List<Producto> productos)
+    {
+        Console.WriteLine($"{"Nombre",-10} {"Precio",-10} {"Cantidad",-10} {"Estado",-10}");
+        foreach(Producto p in productos)
+        {
+            if(p.Estado == "Eliminado")
+            {
+                 Console.WriteLine($"{p.Nombre,-10} {p.Precio,-10} {p.Cantidad,-10} {p.Estado,-10}");
+            }
+        }
+    }
 }
