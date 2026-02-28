@@ -2,7 +2,7 @@ public class Producto
 {
     private string _Nombre;
 
-    private float _Precio;
+    private decimal _Precio;
 
     private int _Cantidad;
 
@@ -18,7 +18,7 @@ public class Producto
             _Nombre = value;
         }}
 
-    public float Precio {
+    public decimal Precio {
         get => _Precio;
         set
         {
@@ -44,7 +44,7 @@ public class Producto
     }
 
 
-    public Producto(string nombre, float precio, int cantidad)
+    public Producto(string nombre, decimal precio, int cantidad)
     {
         if (string.IsNullOrWhiteSpace(nombre))
         {
